@@ -44,11 +44,15 @@ function prepareDisplay(tasks) {
 }
  
 //bot commands, event triggers when a message is sent
-/*TODO
--make sure command is sent from the bot chat only
-*/
+
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;     //makes sure message didnt come from the bot itself
+
+    if (message.channelId !== '979195573229985872') {       //only allows messages in its own channel
+        message.reply('**Mort Bot will only respond in its designated channel.**');
+        return;
+    }
+    
     if (message.content.startsWith(PREFIX)) {
         const [CMD_NAME, ... args] = message.content
             .trim()
@@ -64,6 +68,7 @@ client.on('messageCreate', (message) => {
                 
                 if (LENGTH === 0) {
                     message.reply('**No more tasks coming up at the moment!**');
+                    console.log(typeof(message.channelId));
                 }
                 else {
                     //only displaying tasks within 10 days of command being made
