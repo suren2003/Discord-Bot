@@ -48,7 +48,7 @@ function prepareDisplay(tasks) {
 client.on('messageCreate', (message) => {
     if (message.author.bot) return;     //makes sure message didnt come from the bot itself
 
-    if (message.channelId !== '979195573229985872') {       //only allows messages in its own channel
+    if (message.channelId !== DISCORD_BOT_MESSAGING_CHANNEL_ID) {       //only allows messages in its own channel
         message.reply('**Mort Bot will only respond in its designated channel.**');
         return;
     }
