@@ -25,15 +25,18 @@ const PREFIX = '$';             //prefix to begin a command
 //----functions----
 //preparing the message that will be displayed with tasks within ten days
 function prepareDisplay(tasks) {
-    const time10Days = new Date();
-    time10Days.setDate(time10Days.getDate() + 10);
-    const timeNow = Date.now();
+    const time14Days = new Date();
+    time14Days.setDate(time14Days.getDate() + 14);
+    //const timeNow = Date.now();
     let timeDue;
     let returnedMessage = '----------------------------\n';
-    returnedMessage = returnedMessage + '\n**Tasks Due in the Next 10 days:**\n';
+    returnedMessage = returnedMessage + '\n**Tasks Due in the Next 14 days:**\n';
     for (let i = 0; i < tasks.length; i++) { 
         timeDue = new Date(tasks[i].date);       
-        if ((timeDue.getTime() - timeNow) <= (time10Days.getTime() - timeNow)) {
+        if (timeDue.getTime() <= time14Days.getTime()) {
+            /*made this change if code doesnt work now^
+            (timeDue.getTime() - timeNow) <= (time10Days.getTime() - timeNow)
+            */
             returnedMessage = returnedMessage + `\nTask: ${tasks[i].title}\nDue Date: ${tasks[i].date}\nDescription: ${tasks[i].description}\n`;
         }
     }
@@ -89,7 +92,7 @@ client.on('messageCreate', (message) => {
 
 
 //function activates at the 0th second of the 0th minute at 9 am every saturday
-cron.schedule('0 0 8 * * 6', async () => {
+cron.schedule('0 0 9 * * 6', async () => {
     const tasks = await getInfo();
     const LENGTH = tasks.length
     if (LENGTH === 0) return;       //returning nothing to end function if no tasks for weekly message
