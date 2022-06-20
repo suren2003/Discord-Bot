@@ -37,7 +37,7 @@ function prepareDisplay(tasks) {
             /*made this change if code doesnt work now^
             (timeDue.getTime() - timeNow) <= (time10Days.getTime() - timeNow)
             */
-            returnedMessage = returnedMessage + `\nTask: ${tasks[i].title}\nDue Date: ${tasks[i].date}\nDescription: ${tasks[i].description}\n`;
+            returnedMessage = returnedMessage + `\nTask: ${tasks[i].title}\nDue Date: ${tasks[i].date}\nCourse: ${tasks[i].course}\nStatus: ${tasks[i].status}\n`;
         }
     }
 
@@ -65,7 +65,7 @@ client.on('messageCreate', (message) => {
         if (CMD_NAME === 'tasks') {
             (async () => {
                 const tasks =  await getInfo(); //await is used to wait for promise to return a value, only works with async function
-                const LENGTH = tasks.length
+                const LENGTH = tasks.length;
 
                 //replying based on amount of tasks
                 
