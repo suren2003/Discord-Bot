@@ -26,7 +26,8 @@ async function getInfo() {
                 id: page.id,
                 title: page.properties.Name.title[0].plain_text,
                 date: page.properties.Date.date.start,
-                description: page.properties.Description.rich_text[0].text.content
+                course: page.properties.Course.select.name,
+                status: page.properties.Status.select.name
             };
         }
         
