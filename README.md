@@ -1,0 +1,2 @@
+# Discord-Bot
+Utilized Discords and Notions api to create a bot using NodeJS that takes information from the database of a calendar page, and informs the discord server of upcoming tasks. The bot also utilizes node-cron module to announce the message once a week. Ensure to have all libraries of mentioned uses above downloaded as well as storing Notion's and Discord's tokens and secrets in a .env file.
