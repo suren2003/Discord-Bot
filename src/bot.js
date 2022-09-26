@@ -1,14 +1,14 @@
 //----importing .env content----
 require('dotenv').config();
-const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const DISCORD_BOT_MESSAGING_CHANNEL_ID = process.env.DISCORD_BOT_MESSAGING_CHANNEL_ID;
-const DISCORD_BOT_ROLE_ID = process.env.DISCORD_BOT_ROLE_ID;
+const DISCORD_BOT_TOKEN = "OTczMzk5Mzc5MDg2MDQ5MzEw.G0PB0Z.8KF-OSBgmUY0xa3koq7Z1BcRrgwWgCYeb1t5Mw";
+const DISCORD_BOT_MESSAGING_CHANNEL_ID = "979195573229985872";
+const DISCORD_BOT_ROLE_ID = "890647584941703178";
 
 //----importing cron module----
 const cron = require('node-cron');
 
 //----importing notion function----
-const { getInfo } = require('./notion.js');      
+const { getInfo } = require('./notion.js');
 
 
 //----initializing discord client----
@@ -18,9 +18,11 @@ const { Client, Intents, Channel, Message } = require('discord.js');           /
 const myIntents = new Intents();        //declaring intents
 myIntents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES);                      //intents taken from discord.js intents section
 
-const client = new Client({ intents: myIntents});
+const client = new Client({ intents: myIntents });
 
 const PREFIX = '$';             //prefix to begin a command
+
+console.log('Mort Bot is ready!'); //announcing bot is ready in terminal
 
 //----functions----
 //preparing the message that will be displayed with tasks within ten days
@@ -31,8 +33,8 @@ function prepareDisplay(tasks) {
     let timeDue;
     let returnedMessage = '----------------------------\n';
     returnedMessage = returnedMessage + '\n**Tasks Due in the Next 14 days:**\n';
-    for (let i = 0; i < tasks.length; i++) { 
-        timeDue = new Date(tasks[i].date);       
+    for (let i = 0; i < tasks.length; i++) {
+        timeDue = new Date(tasks[i].date);
         if (timeDue.getTime() <= time14Days.getTime()) {
             /*made this change if code doesnt work now^
             (timeDue.getTime() - timeNow) <= (time10Days.getTime() - timeNow)
@@ -45,7 +47,7 @@ function prepareDisplay(tasks) {
 
     return returnedMessage;
 }
- 
+
 //bot commands, event triggers when a message is sent
 
 client.on('messageCreate', (message) => {
@@ -53,36 +55,39 @@ client.on('messageCreate', (message) => {
 
     if (message.channelId !== DISCORD_BOT_MESSAGING_CHANNEL_ID) {       //only allows messages in its own channel
         message.reply('**Mort Bot will only respond in its designated channel.**');
+        console.log('check');
         return;
     }
-    
+
     if (message.content.startsWith(PREFIX)) {
-        const [CMD_NAME, ... args] = message.content
+        const [CMD_NAME, ...args] = message.content
             .trim()
             .substring(PREFIX.length)                       //methods applying to message.content
             .split(/\s+/);   //splits any whitespaces only
         //displaying upcoming tasks
         if (CMD_NAME === 'tasks') {
             (async () => {
-                const tasks =  await getInfo(); //await is used to wait for promise to return a value, only works with async function
+                const tasks = await getInfo(); //await is used to wait for promise to return a value, only works with async function
                 const LENGTH = tasks.length;
 
                 //replying based on amount of tasks
-                
+
                 if (LENGTH === 0) {
                     message.reply('**No more tasks coming up at the moment!**');
-                    console.log(typeof(message.channelId));
+                    console.log(typeof (message.channelId));
                 }
                 else {
                     //only displaying tasks within 10 days of command being made
                     message.reply(prepareDisplay(tasks));
                 }
             })()
-            
+
         }
+
         else if (CMD_NAME === 'help') {
-            message.channel.send('**$tasks** --> displays tasks coming up in next 10 days');
+            message.channel.send('**$tasks** --> displays tasks coming up in next 14 days');
         }
+
         else {
             message.reply('Invalid command. Use **$help** to see command list.');
         }
@@ -99,7 +104,7 @@ cron.schedule('0 0 9 * * 6', async () => {
 
     //takes in channel id and sends message into that channel
     //<@$id> is format to mention a role using role id
-    client.channels.cache.get(DISCORD_BOT_MESSAGING_CHANNEL_ID).send(`<@&${DISCORD_BOT_ROLE_ID}> \n${prepareDisplay(tasks)}`);   
+    client.channels.cache.get(DISCORD_BOT_MESSAGING_CHANNEL_ID).send(`<@&${DISCORD_BOT_ROLE_ID}> \n${prepareDisplay(tasks)}`);
 });
 
 
