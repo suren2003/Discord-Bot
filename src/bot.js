@@ -1,8 +1,8 @@
 //----importing .env content----
 require('dotenv').config();
-const DISCORD_BOT_TOKEN = 
-const DISCORD_BOT_MESSAGING_CHANNEL_ID = 
-const DISCORD_BOT_ROLE_ID = 
+const DISCORD_BOT_TOKEN = DISCORD_BOT_TOKEN;
+const DISCORD_BOT_MESSAGING_CHANNEL_ID = DISCORD_BOT_MESSAGING_CHANNEL_ID;
+const DISCORD_BOT_ROLE_ID = DISCORD_BOT_ROLE_ID;
 
 //----importing cron module----
 const cron = require('node-cron');
